@@ -82,7 +82,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[linear-gradient(180deg,#f5fbff_0%,#eef8ff_36%,#f7fbff_100%)]">
       {/* Navigation */}
       <header className="sticky top-0 z-50 w-full border-b border-border bg-card/95 backdrop-blur supports-backdrop-filter:bg-card/60">
         <nav className="mx-auto flex h-16 max-w-300 items-center justify-between px-4 lg:px-8">
@@ -118,189 +118,77 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-accent via-background to-background" />
-        
-        {/* Floating Elements */}
-        <div className="absolute top-20 left-[10%] h-64 w-64 rounded-full bg-primary/5 blur-3xl" />
-        <div className="absolute top-40 right-[15%] h-48 w-48 rounded-full bg-secondary/10 blur-3xl" />
-        
-        <div className="relative mx-auto max-w-300 px-4 py-20 lg:px-8 lg:py-32">
-          <div className="flex flex-col items-center text-center">
-            <Badge variant="secondary" className="mb-6 gap-2 px-4 py-2">
-              <Zap className="h-3.5 w-3.5" />
-              Intelligent Learning System
-            </Badge>
-            
-            <h1 className="max-w-4xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl text-balance">
-              Finally understand{' '}
-              <span className="relative">
-                <span className="relative z-10 bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
-                  why you fail
-                </span>
-                <svg className="absolute -bottom-2 left-0 h-3 w-full" viewBox="0 0 200 12" preserveAspectRatio="none">
-                  <path d="M0 8 Q 50 0, 100 8 T 200 8" fill="none" stroke="currentColor" strokeWidth="3" className="text-primary/30" />
-                </svg>
-              </span>
-              {' '}and how to fix it
-            </h1>
-            
-            <p className="mt-6 max-w-2xl text-lg text-muted-foreground text-pretty">
-              AdaptIQ diagnoses the real reasons behind wrong answers by analyzing concept dependencies. 
-              See your knowledge gaps on a visual graph and get AI-powered guidance to master any subject.
-            </p>
-            
-            <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
-              <Link href="/">
-                <Button size="lg" className="gap-2 px-8">
-                  Start Learning Free
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
-              <Link href="/knowledge-map">
-                <Button variant="outline" size="lg" className="gap-2">
-                  <Network className="h-4 w-4" />
-                  Explore Knowledge Graph
-                </Button>
-              </Link>
-            </div>
+      <section className="relative overflow-hidden pb-14 pt-10 lg:pb-20 lg:pt-14">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,#dceeff_0%,transparent_52%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,#e5f2ff_0%,transparent_50%)]" />
+        <div className="absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
 
-            {/* Stats */}
-            <div className="mt-16 grid grid-cols-2 gap-8 sm:grid-cols-4 lg:gap-16">
-              {stats.map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <p className="text-3xl font-bold text-foreground lg:text-4xl">{stat.value}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">{stat.label}</p>
+        <div className="relative mx-auto max-w-300 px-4 lg:px-8">
+          <div className="rounded-[2.25rem] border border-blue-100 bg-[#eef8ff] px-5 pb-8 pt-8 shadow-[0_30px_80px_-45px_rgba(59,130,246,0.55)] sm:px-8 lg:px-12 lg:pb-12 lg:pt-10">
+            <div className="relative">
+              <Badge className="mb-5 rounded-full border border-blue-200/70 bg-white/90 px-4 py-1.5 text-[11px] uppercase tracking-[0.14em] text-blue-700 hover:bg-white/90">
+                Adaptive Math Intelligence
+              </Badge>
+
+              <h1 className="max-w-4xl text-4xl font-bold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-[4rem]">
+                It&apos;s time to
+                <span className="mx-2 inline-flex items-center rounded-full bg-white px-4 py-2 text-lg font-semibold text-blue-700 shadow-sm sm:text-xl lg:mx-3 lg:text-2xl">
+                  upgrade
+                </span>
+                your
+                <span className="mt-1 block text-blue-600">learning!</span>
+              </h1>
+
+              <p className="mt-6 max-w-2xl text-base text-slate-600 sm:text-lg">
+                AdaptIQ finds the exact concept gap behind every wrong answer and gives you the clearest next step to improve faster.
+              </p>
+
+              <div className="mt-10 grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <Link href="/" className="group inline-flex">
+                    <span className="inline-flex items-center gap-3 rounded-full border border-blue-200 bg-white px-3 py-2 shadow-sm transition-colors group-hover:bg-blue-50">
+                      <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 text-blue-700">
+                        <ArrowRight className="h-4 w-4" />
+                      </span>
+                      <span className="pr-4 text-sm font-semibold text-slate-700 sm:text-base">Open Guide Tour</span>
+                    </span>
+                  </Link>
+
+                  <Link href="/knowledge-map" className="group inline-flex">
+                    <span className="inline-flex items-center gap-3 rounded-full border border-blue-200 bg-linear-to-r from-blue-100/90 to-blue-200/70 px-3 py-2 shadow-sm transition-opacity group-hover:opacity-90">
+                      <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white text-blue-700">
+                        <Network className="h-4 w-4" />
+                      </span>
+                      <span className="pr-4 text-sm font-semibold text-slate-700 sm:text-base">Open Knowledge Graph</span>
+                    </span>
+                  </Link>
                 </div>
-              ))}
+
+                <div className="max-w-52 rounded-2xl border border-blue-200/70 bg-white/70 p-3 text-sm text-slate-600 backdrop-blur sm:max-w-60 md:ml-auto">
+                  Solve your math problems with AI-backed concept diagnosis and guided practice.
+                </div>
+              </div>
+
             </div>
           </div>
 
-          {/* Hero Visual - Knowledge Graph Preview */}
-          <div className="mt-20 relative">
-            <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent z-10 pointer-events-none" />
-            <Card className="overflow-hidden border-2 shadow-2xl">
-              <div className="bg-muted/30 p-4 border-b flex items-center gap-3">
-                <div className="flex gap-1.5">
-                  <div className="h-3 w-3 rounded-full bg-destructive/60" />
-                  <div className="h-3 w-3 rounded-full bg-warning/60" />
-                  <div className="h-3 w-3 rounded-full bg-success/60" />
-                </div>
-                <span className="text-sm text-muted-foreground">Knowledge Graph - Physics</span>
+          <div className="mt-8 grid grid-cols-2 gap-4 rounded-2xl border border-border/70 bg-card/70 p-5 text-center shadow-sm backdrop-blur sm:grid-cols-4 lg:mt-10">
+            {stats.map((stat) => (
+              <div key={stat.label}>
+                <p className="text-2xl font-bold text-foreground lg:text-3xl">{stat.value}</p>
+                <p className="mt-1 text-xs text-muted-foreground lg:text-sm">{stat.label}</p>
               </div>
-              <CardContent className="p-0">
-                <div className="relative h-100 bg-card overflow-hidden">
-                  {/* Animated Knowledge Graph Visualization */}
-                  <svg className="w-full h-full" viewBox="0 0 800 400">
-                    {/* Connections */}
-                    <g className="opacity-60">
-                      <line x1="400" y1="80" x2="250" y2="180" stroke="#E2E8F0" strokeWidth="2" />
-                      <line x1="400" y1="80" x2="550" y2="180" stroke="#E2E8F0" strokeWidth="2" />
-                      <line x1="250" y1="180" x2="150" y2="300" stroke="#E2E8F0" strokeWidth="2" />
-                      <line x1="250" y1="180" x2="350" y2="300" stroke="#E2E8F0" strokeWidth="2" />
-                      <line x1="550" y1="180" x2="450" y2="300" stroke="#E2E8F0" strokeWidth="2" />
-                      <line x1="550" y1="180" x2="650" y2="300" stroke="#E2E8F0" strokeWidth="2" />
-                    </g>
-                    
-                    {/* Highlight Path */}
-                    <path d="M400 80 L250 180 L150 300" fill="none" stroke="#2563EB" strokeWidth="3" strokeDasharray="8,4" className="animate-pulse" />
-                    
-                    {/* Nodes */}
-                    <g>
-                      {/* Root Node - Mastered */}
-                      <circle cx="400" cy="80" r="35" fill="#22C55E" className="drop-shadow-lg" />
-                      <text x="400" y="85" textAnchor="middle" fill="white" fontSize="12" fontWeight="600">Motion</text>
-                      
-                      {/* Level 2 - Weak */}
-                      <circle cx="250" cy="180" r="30" fill="#F59E0B" className="drop-shadow-lg" />
-                      <text x="250" y="185" textAnchor="middle" fill="white" fontSize="11" fontWeight="600">Velocity</text>
-                      
-                      {/* Level 2 - Mastered */}
-                      <circle cx="550" cy="180" r="30" fill="#22C55E" className="drop-shadow-lg" />
-                      <text x="550" y="185" textAnchor="middle" fill="white" fontSize="11" fontWeight="600">Distance</text>
-                      
-                      {/* Level 3 - Missing */}
-                      <circle cx="150" cy="300" r="28" fill="#EF4444" className="drop-shadow-lg animate-pulse" />
-                      <text x="150" y="305" textAnchor="middle" fill="white" fontSize="10" fontWeight="600">Vectors</text>
-                      
-                      {/* Level 3 - Weak */}
-                      <circle cx="350" cy="300" r="28" fill="#F59E0B" className="drop-shadow-lg" />
-                      <text x="350" y="305" textAnchor="middle" fill="white" fontSize="10" fontWeight="600">Speed</text>
-                      
-                      {/* Level 3 - Mastered */}
-                      <circle cx="450" cy="300" r="28" fill="#22C55E" className="drop-shadow-lg" />
-                      <text x="450" y="305" textAnchor="middle" fill="white" fontSize="10" fontWeight="600">Time</text>
-                      
-                      <circle cx="650" cy="300" r="28" fill="#22C55E" className="drop-shadow-lg" />
-                      <text x="650" y="305" textAnchor="middle" fill="white" fontSize="10" fontWeight="600">Units</text>
-                    </g>
-
-                    {/* Legend */}
-                    <g transform="translate(600, 30)">
-                      <circle cx="0" cy="0" r="8" fill="#22C55E" />
-                      <text x="15" y="4" fontSize="11" fill="#64748B">Mastered</text>
-                      <circle cx="0" cy="25" r="8" fill="#F59E0B" />
-                      <text x="15" y="29" fontSize="11" fill="#64748B">Weak</text>
-                      <circle cx="0" cy="50" r="8" fill="#EF4444" />
-                      <text x="15" y="54" fontSize="11" fill="#64748B">Missing</text>
-                    </g>
-                  </svg>
-
-                  {/* Diagnosis Callout */}
-                  <div className="absolute bottom-4 left-4 right-4 bg-card/95 backdrop-blur border rounded-lg p-4 shadow-lg">
-                    <div className="flex items-start gap-3">
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-destructive/10">
-                        <Target className="h-4 w-4 text-destructive" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-sm text-foreground">Root Cause Found</p>
-                        <p className="text-sm text-muted-foreground">
-                          You&apos;re struggling with <span className="font-medium text-foreground">Velocity</span> because you missed <span className="font-medium text-destructive">Vectors</span>. Master vectors first to unlock your potential.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Floating User Avatars */}
-            <div className="absolute -left-4 top-20 hidden lg:block">
-              <div className="flex flex-col items-center gap-2 animate-bounce" style={{ animationDuration: '3s' }}>
-                <Avatar className="h-14 w-14 border-4 border-card shadow-lg">
-                  <AvatarFallback className="bg-primary text-primary-foreground">AK</AvatarFallback>
-                </Avatar>
-                <Badge variant="secondary" className="text-xs">Ananya</Badge>
-              </div>
-            </div>
-            
-            <div className="absolute -right-4 top-32 hidden lg:block">
-              <div className="flex flex-col items-center gap-2 animate-bounce" style={{ animationDuration: '3.5s' }}>
-                <Avatar className="h-12 w-12 border-4 border-card shadow-lg">
-                  <AvatarFallback className="bg-secondary text-secondary-foreground">RK</AvatarFallback>
-                </Avatar>
-                <Badge variant="secondary" className="text-xs">Rohan</Badge>
-              </div>
-            </div>
-
-            <div className="absolute left-20 -bottom-4 hidden lg:block">
-              <div className="flex flex-col items-center gap-2 animate-bounce" style={{ animationDuration: '4s' }}>
-                <Avatar className="h-11 w-11 border-4 border-card shadow-lg">
-                  <AvatarFallback className="bg-success text-success-foreground">SP</AvatarFallback>
-                </Avatar>
-                <Badge variant="secondary" className="text-xs">Sneha</Badge>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 lg:py-32 bg-muted/30">
+      <section id="features" className="relative py-20 lg:py-28">
         <div className="mx-auto max-w-300 px-4 lg:px-8">
-          <div className="text-center mb-16">
-            <Badge variant="outline" className="mb-4">Features</Badge>
+          <div className="rounded-4xl border border-blue-100 bg-[#edf7ff]/95 px-6 py-12 shadow-[0_24px_70px_-46px_rgba(56,130,246,0.65)] lg:px-10">
+          <div className="text-center mb-14">
+            <Badge variant="outline" className="mb-4 border-blue-200 bg-white/80 text-blue-700">Features</Badge>
             <h2 className="text-3xl font-bold text-foreground sm:text-4xl text-balance">
               Learning that actually adapts to you
             </h2>
@@ -311,9 +199,9 @@ export default function LandingPage() {
 
           <div className="grid gap-6 md:grid-cols-2">
             {features.map((feature, index) => (
-              <Card key={index} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <Card key={index} className="group border-blue-100/70 bg-white/85 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
                 <CardContent className="p-6">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary mb-4 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-blue-700 transition-colors group-hover:bg-blue-600 group-hover:text-white">
                     <feature.icon className="h-6 w-6" />
                   </div>
                   <h3 className="text-xl font-semibold text-foreground mb-2">{feature.title}</h3>
@@ -322,14 +210,16 @@ export default function LandingPage() {
               </Card>
             ))}
           </div>
+          </div>
         </div>
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-20 lg:py-32">
+      <section id="how-it-works" className="py-20 lg:py-28">
         <div className="mx-auto max-w-300 px-4 lg:px-8">
+          <div className="rounded-4xl border border-blue-100 bg-white/80 px-6 py-12 shadow-[0_24px_70px_-50px_rgba(56,130,246,0.6)] lg:px-10">
           <div className="text-center mb-16">
-            <Badge variant="outline" className="mb-4">How It Works</Badge>
+            <Badge variant="outline" className="mb-4 border-blue-200 bg-blue-50 text-blue-700">How It Works</Badge>
             <h2 className="text-3xl font-bold text-foreground sm:text-4xl">
               Three steps to smarter learning
             </h2>
@@ -356,9 +246,9 @@ export default function LandingPage() {
                 icon: Sparkles,
               },
             ].map((item, index) => (
-              <div key={index} className="relative">
+              <div key={index} className="relative rounded-2xl border border-blue-100 bg-[#f2f9ff] p-6">
                 <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-                  <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-primary-foreground text-2xl font-bold">
+                  <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-600 text-2xl font-bold text-white">
                     {item.step}
                   </div>
                   <h3 className="text-xl font-semibold text-foreground mb-2">{item.title}</h3>
@@ -372,41 +262,43 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
+          </div>
         </div>
       </section>
 
       {/* Benefits Section */}
-      <section className="py-20 lg:py-32 bg-primary text-primary-foreground">
+      <section className="py-20 lg:py-28">
         <div className="mx-auto max-w-300 px-4 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-2 items-center">
+          <div className="grid items-center gap-12 rounded-4xl border border-blue-100 bg-[#eaf6ff] px-6 py-12 shadow-[0_24px_80px_-50px_rgba(56,130,246,0.65)] lg:grid-cols-2 lg:px-10">
             <div>
-              <h2 className="text-3xl font-bold sm:text-4xl text-balance">
+              <Badge variant="outline" className="mb-4 border-blue-200 bg-white/85 text-blue-700">Why AdaptIQ</Badge>
+              <h2 className="text-3xl font-bold text-slate-900 sm:text-4xl text-balance">
                 Stop wasting time on the wrong problems
               </h2>
-              <p className="mt-4 text-lg text-primary-foreground/80">
+              <p className="mt-4 text-lg text-slate-600">
                 Most students study harder, not smarter. AdaptIQ ensures every minute you spend is on the concepts that actually matter for your progress.
               </p>
               <ul className="mt-8 space-y-3">
                 {benefits.map((benefit, index) => (
                   <li key={index} className="flex items-center gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-secondary shrink-0" />
+                    <CheckCircle2 className="h-5 w-5 text-blue-600 shrink-0" />
                     <span>{benefit}</span>
                   </li>
                 ))}
               </ul>
               <Link href="/">
-                <Button size="lg" variant="secondary" className="mt-8 gap-2">
+                <Button size="lg" className="mt-8 gap-2 rounded-full bg-blue-600 text-white hover:bg-blue-700">
                   Start Your Journey
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
             </div>
             <div className="relative">
-              <Card className="bg-card text-card-foreground">
+              <Card className="border-blue-100 bg-white/90 text-card-foreground">
                 <CardContent className="p-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
-                      <Sparkles className="h-5 w-5 text-primary-foreground" />
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600">
+                      <Sparkles className="h-5 w-5 text-white" />
                     </div>
                     <div>
                       <p className="font-medium">AI Study Companion</p>
@@ -432,10 +324,11 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 lg:py-32">
+      <section id="testimonials" className="py-20 lg:py-28">
         <div className="mx-auto max-w-300 px-4 lg:px-8">
+          <div className="rounded-4xl border border-blue-100 bg-white/85 px-6 py-12 shadow-[0_24px_70px_-50px_rgba(56,130,246,0.6)] lg:px-10">
           <div className="text-center mb-16">
-            <Badge variant="outline" className="mb-4">Testimonials</Badge>
+            <Badge variant="outline" className="mb-4 border-blue-200 bg-blue-50 text-blue-700">Testimonials</Badge>
             <h2 className="text-3xl font-bold text-foreground sm:text-4xl">
               Loved by students and educators
             </h2>
@@ -443,7 +336,7 @@ export default function LandingPage() {
 
           <div className="grid gap-6 md:grid-cols-3">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="h-full">
+              <Card key={index} className="h-full border-blue-100/80 bg-[#f5fbff]">
                 <CardContent className="p-6 flex flex-col h-full">
                   <p className="text-muted-foreground flex-1">&ldquo;{testimonial.content}&rdquo;</p>
                   <div className="flex items-center gap-3 mt-6 pt-6 border-t">
@@ -461,12 +354,14 @@ export default function LandingPage() {
               </Card>
             ))}
           </div>
+          </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 lg:py-32 bg-muted/50">
+      <section className="py-20 lg:py-28">
         <div className="mx-auto max-w-300 px-4 lg:px-8 text-center">
+          <div className="rounded-4xl border border-blue-100 bg-[#edf8ff] px-6 py-12 shadow-[0_24px_70px_-45px_rgba(56,130,246,0.65)] lg:px-10">
           <div className="flex justify-center mb-6">
             <div className="flex -space-x-3">
               {['AS', 'PM', 'RK', 'NJ', 'SK'].map((initials, i) => (
@@ -490,26 +385,27 @@ export default function LandingPage() {
           </p>
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link href="/">
-              <Button size="lg" className="gap-2 px-8">
+              <Button size="lg" className="gap-2 rounded-full bg-blue-600 px-8 text-white hover:bg-blue-700">
                 Get Started Free
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
             <Link href="/practice">
-              <Button variant="outline" size="lg">
+              <Button variant="outline" size="lg" className="rounded-full border-blue-300 bg-white/80 text-blue-700 hover:bg-white">
                 Try a Practice Session
               </Button>
             </Link>
+          </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t bg-card py-12">
+      <footer className="py-12">
         <div className="mx-auto max-w-300 px-4 lg:px-8">
-          <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
+          <div className="flex flex-col items-center justify-between gap-6 rounded-3xl border border-blue-100 bg-white/85 px-6 py-8 shadow-sm md:flex-row">
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600">
                 <Brain className="h-4 w-4 text-primary-foreground" />
               </div>
               <span className="font-semibold text-foreground">AdaptIQ</span>
