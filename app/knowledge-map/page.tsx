@@ -22,7 +22,9 @@ import {
   Target,
   CheckCircle2,
   AlertTriangle,
-  XCircle
+  XCircle,
+  Maximize2,
+  Minimize2
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -35,6 +37,17 @@ export default function KnowledgeMapPage() {
     { parentConceptId: string; childConceptId: string }[]
   >([]);
   const [selectedConcept, setSelectedConcept] = useState<Concept | null>(null);
+  const [isGraphFullscreen, setIsGraphFullscreen] = useState(false);
+
+  useEffect(() => {
+    if (!isGraphFullscreen) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isGraphFullscreen]);
 
   useEffect(() => {
     const loadKnowledgeData = async () => {
@@ -202,6 +215,28 @@ export default function KnowledgeMapPage() {
               </TabsList>
 
               <TabsContent value="graph" className="mt-0">
+                <div className="mb-3 flex items-center justify-end">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="gap-2"
+                    onClick={() => setIsGraphFullscreen((prev) => !prev)}
+                  >
+                    {isGraphFullscreen ? (
+                      <>
+                        <Minimize2 className="h-4 w-4" />
+                        Exit Fullscreen
+                      </>
+                    ) : (
+                      <>
+                        <Maximize2 className="h-4 w-4" />
+                        Fullscreen Map
+                      </>
+                    )}
+                  </Button>
+                </div>
+
                 <div className="h-125 lg:h-150">
                   <KnowledgeGraph
                     concepts={concepts}
@@ -408,6 +443,37 @@ export default function KnowledgeMapPage() {
           </aside>
         </div>
       </main>
+
+      {isGraphFullscreen ? (
+        <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm">
+          <div className="mx-auto flex h-full w-full max-w-450 flex-col p-4 sm:p-6 lg:p-8">
+            <div className="mb-4 flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-semibold text-foreground">Knowledge Map - Fullscreen</h2>
+                <p className="text-sm text-muted-foreground">Use + / - / R controls and drag to pan the graph.</p>
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                className="gap-2"
+                onClick={() => setIsGraphFullscreen(false)}
+              >
+                <Minimize2 className="h-4 w-4" />
+                Exit Fullscreen
+              </Button>
+            </div>
+
+            <div className="min-h-0 flex-1 overflow-hidden rounded-xl border border-border bg-card">
+              <KnowledgeGraph
+                concepts={concepts}
+                dependencies={graphDependencies}
+                onSelectConcept={setSelectedConcept}
+                selectedConceptId={selectedConcept?.id}
+              />
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
