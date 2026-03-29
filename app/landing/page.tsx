@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Brain, Network, Sparkles, Target, TrendingUp, ArrowRight, CheckCircle2, ChevronRight, Users, BookOpen, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -141,8 +142,15 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 w-full border-b border-border bg-card/95 backdrop-blur supports-backdrop-filter:bg-card/60">
         <nav className="mx-auto flex h-16 max-w-300 items-center justify-between px-4 lg:px-8">
           <Link href="/landing" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-              <Brain className="h-5 w-5 text-primary-foreground" />
+            <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg border border-blue-100 bg-white">
+              <Image
+                src="/logo.png"
+                alt="AdaptIQ logo"
+                width={36}
+                height={36}
+                className="h-full w-full object-cover"
+                priority
+              />
             </div>
             <span className="font-semibold text-foreground text-lg">AdaptIQ</span>
           </Link>

@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { Brain, LayoutDashboard, BookOpen, Network, TrendingUp, Settings, User, LogOut, RefreshCcw } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Network, TrendingUp, Settings, User, LogOut, RefreshCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
@@ -79,8 +80,15 @@ export function Navbar() {
       <nav className="mx-auto flex h-16 max-w-350 items-center justify-between px-4 lg:px-8">
         {/* Logo */}
         <Link href={user ? '/' : '/landing'} className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-            <Brain className="h-5 w-5 text-primary-foreground" />
+          <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg border border-blue-100 bg-white">
+            <Image
+              src="/logo.png"
+              alt="AdaptIQ logo"
+              width={36}
+              height={36}
+              className="h-full w-full object-cover"
+              priority
+            />
           </div>
           <span className="hidden font-semibold text-foreground text-lg sm:inline-block">
             AdaptIQ
