@@ -21,6 +21,7 @@
 - Redirect logic:
   - Unauthenticated user on protected route -> /landing
   - Authenticated user on /auth/* -> /
+- API routes are bypassed from proxy auth redirects so `/api/*` handlers can return proper JSON status codes.
 - Supabase helpers:
   - Browser client: [lib/supabase/client.ts](lib/supabase/client.ts)
   - Server client: [lib/supabase/server.ts](lib/supabase/server.ts)
@@ -46,6 +47,7 @@
 - Mastery is tracked per concept (0..1), mapped to statuses (not_started, weak, developing, mastered).
 - Recovery paths are stored in `learning_paths` and tracked per-step in `learning_path_items`.
 - Recovery sidebar can render checkmarks and completed count using `completed_at`.
+- Recovery paths store `before_mastery` on creation for completion feedback.
 
 ## Current status / implementation notes
 - Dashboard, practice, knowledge-map, and progress are DB-backed via Supabase:
@@ -57,10 +59,18 @@
   - Inserts question attempts
   - Tracks/updates practice sessions
   - Upserts user concept mastery
+- Practice question API is centralized in [app/api/questions/route.ts](app/api/questions/route.ts):
+  - supports `focusMode=true|false`
+  - weak concept rule uses normalized mastery `< 0.7`
+  - falls back to default question flow when no weak concepts/questions are available
+- Practice page includes Focus Mode toggle and status badge messaging for fallback/targeted states.
 - Practice question ordering is now freshness-aware:
   - weak/missing concepts are prioritized when no concept filter is provided
   - unseen/least-recently-attempted questions are preferred before repeats
 - Recovery step questions are now freshness-aware per user rather than fixed oldest-first selection.
+- Recovery completion feedback is implemented:
+  - completion endpoint [app/api/recovery/complete/route.ts](app/api/recovery/complete/route.ts) returns before/after mastery
+  - UI card [components/recovery-feedback.tsx](components/recovery-feedback.tsx) shows post-completion progress/summary
 - Realtime update behavior is present with throttling to avoid refresh storms.
 - AI assistant backend is live via [app/api/chat/route.ts](app/api/chat/route.ts) using Groq model `openai/gpt-oss-120b`.
 - Grounded AI modules are implemented:

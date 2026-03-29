@@ -40,6 +40,9 @@ A predefined structured knowledge graph where:
 ### 2. Practice System
 - Questions fetched from Supabase (`questions`) with difficulty mapping (easy, medium, hard)
 - Questions linked to concepts via `concept_id`
+- Focus Mode toggle (`/practice?focusMode=true`) for targeted weak-concept practice
+- Focus Mode weak rule: normalized mastery `< 0.7`
+- Focus Mode fallback: if no weak concepts/questions are available, default question flow is used
 - Weak-first concept prioritization when practicing without a fixed concept filter
 - Question rotation that prefers unseen/least-recently-attempted questions before repeating
 - Instant feedback with detailed explanations
@@ -81,15 +84,19 @@ When a student answers incorrectly:
 ### 7. Hindsight + Recovery Path
 - Logs mistake events to build a hindsight trail (`hindsight_events`)
 - Generates deterministic learning paths with prerequisite ordering
+- Stores `before_mastery` snapshot on path creation for completion feedback
 - Tracks step completion in `learning_path_items.completed_at`
 - Recovery sidebar shows per-step done checkmarks and subtle `Completed X/Y` progress
 - Recovery question selection prefers unseen/least-recent concept questions for the current user
 - Auto-marks learning path status as `completed` when all steps finish
+- Recovery completion feedback API (`POST /api/recovery/complete`) returns `{ before, after }` mastery values
+- Recovery UI displays completion feedback card after finishing a plan (improved or completed message)
 - Settings includes a manual sync action to push per-concept mastery snapshots into Hindsight
 
 ### 8. Auth + Realtime UX
 - Supabase email/password authentication
 - Route protection through Next.js `proxy.ts`
+- API routes are excluded from proxy auth redirects so app endpoints return native JSON statuses
 - Public routes: `/landing`, `/auth/*`
 - Protected routes: `/`, `/practice`, `/knowledge-map`, `/progress`, `/recovery`
 - Realtime-triggered dashboard/progress refresh (throttled)
@@ -120,6 +127,9 @@ adaptiq/
 │   ├── layout.tsx          # Root layout with fonts and metadata
 │   ├── page.tsx             # Dashboard (DB-backed)
 │   ├── globals.css          # Design system tokens
+│   ├── api/
+│   │   ├── questions/route.ts # Practice question endpoint (default + focus mode)
+│   │   └── recovery/complete/route.ts # Recovery completion feedback endpoint
 │   ├── landing/
 │   │   └── page.tsx         # Marketing landing page
 │   ├── practice/
