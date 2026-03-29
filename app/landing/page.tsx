@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Brain, Network, Sparkles, Target, TrendingUp, ArrowRight, CheckCircle2, ChevronRight, Users, BookOpen, Zap } from 'lucide-react';
@@ -69,9 +70,62 @@ const stats = [
   { value: '500+', label: 'Concepts Mapped' },
 ];
 
+const experienceStages = [
+  'Personalize',
+  'Engage',
+  'Practice',
+  'Assess',
+  'Assist',
+] as const;
+
+const experienceDetails: Record<(typeof experienceStages)[number], {
+  title: string;
+  description: string;
+  actionLabel: string;
+  actionHref: string;
+  badge: string;
+}> = {
+  Personalize: {
+    title: 'Personalized by Hindsight Memory',
+    description: 'AdaptIQ uses your hindsight events and mastery history to detect recurring struggles and prioritize exactly what you need next.',
+    actionLabel: 'Open Settings Sync',
+    actionHref: '/settings',
+    badge: 'Hindsight + Mastery Sync',
+  },
+  Engage: {
+    title: 'Engage with AI Study Companion',
+    description: 'Use the built-in AI companion for grounded explanations, concept clarity, and guided next steps based on your real progress.',
+    actionLabel: 'Try AI Companion',
+    actionHref: '/practice',
+    badge: 'Grounded AI Companion',
+  },
+  Practice: {
+    title: 'Practice with Focus Mode',
+    description: 'Switch on Focus Mode to practice weak concepts first, with fallback to default flow when weak targets are not available.',
+    actionLabel: 'Start Focus Practice',
+    actionHref: '/practice?focusMode=true',
+    badge: 'Weak-Concept Targeting',
+  },
+  Assess: {
+    title: 'Assess Root Cause, Not Just Scores',
+    description: 'Every incorrect attempt can trigger diagnosis that traces prerequisite dependencies and reveals the true concept causing the mistake.',
+    actionLabel: 'View Knowledge Map',
+    actionHref: '/knowledge-map',
+    badge: 'Dependency Diagnosis',
+  },
+  Assist: {
+    title: 'Assist Recovery with Guided Paths',
+    description: 'Adaptive recovery plans track completion steps and now show progress feedback so learners can see measurable improvement.',
+    actionLabel: 'Open Recovery',
+    actionHref: '/recovery',
+    badge: 'Recovery Completion Feedback',
+  },
+};
+
 export default function LandingPage() {
   const router = useRouter();
   const supabase = createClient();
+  const [activeStage, setActiveStage] = useState<(typeof experienceStages)[number]>('Personalize');
 
   const handleGetStarted = async () => {
     const {
@@ -179,6 +233,84 @@ export default function LandingPage() {
                 <p className="mt-1 text-xs text-muted-foreground lg:text-sm">{stat.label}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Adaptive Experience Section */}
+      <section className="py-16 lg:py-24">
+        <div className="mx-auto max-w-300 px-4 lg:px-8">
+          <div className="relative overflow-hidden rounded-4xl border border-blue-100 bg-[#edf7ff]/95 px-6 py-14 shadow-[0_24px_70px_-46px_rgba(56,130,246,0.65)] sm:px-10 lg:px-14 lg:py-20">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_0%,rgba(59,130,246,0.18),transparent_42%),radial-gradient(circle_at_0%_100%,rgba(56,189,248,0.12),transparent_35%)]" />
+
+            <div className="relative text-center">
+              <h2 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-7xl">
+                Adaptive Learning Experience
+              </h2>
+
+              <div className="mx-auto mt-10 w-full max-w-5xl rounded-full border border-blue-200 bg-white/80 p-2.5 shadow-inner shadow-blue-100 sm:mt-14">
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5 lg:gap-3">
+                  {experienceStages.map((stage) => (
+                    <button
+                      key={stage}
+                      type="button"
+                      onClick={() => setActiveStage(stage)}
+                      className={`rounded-full px-4 py-3 text-center text-base font-semibold transition-all sm:text-lg ${activeStage === stage ? 'bg-blue-600 text-white shadow-lg shadow-blue-300/50' : 'text-slate-500 hover:bg-blue-50 hover:text-slate-800'}`}
+                    >
+                      {stage}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-10 grid items-center gap-8 text-left lg:grid-cols-[1fr_1.2fr]">
+                <div>
+                  <Badge className="mb-4 border-blue-200 bg-white/90 text-blue-700 hover:bg-white/90">
+                    {experienceDetails[activeStage].badge}
+                  </Badge>
+                  <h3 className="text-3xl font-bold text-slate-900 sm:text-4xl">
+                    {experienceDetails[activeStage].title}
+                  </h3>
+                  <p className="mt-4 max-w-xl text-lg text-slate-600">
+                    {experienceDetails[activeStage].description}
+                  </p>
+                  <div className="mt-8">
+                    <Link href={experienceDetails[activeStage].actionHref}>
+                      <Button className="rounded-full bg-blue-600 px-7 text-white hover:bg-blue-700">
+                        {experienceDetails[activeStage].actionLabel}
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="rounded-3xl border border-blue-100 bg-white/90 p-4 shadow-xl shadow-blue-100/70">
+                  <div className="rounded-2xl border border-blue-100 bg-[#f3f9ff] p-5">
+                    <div className="mb-4 flex items-center justify-between">
+                      <p className="text-sm font-semibold text-slate-900">{activeStage} Panel</p>
+                      <span className="rounded-full bg-blue-100 px-3 py-1 text-xs text-blue-700">Live Feature</span>
+                    </div>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <div className="rounded-xl border border-blue-100 bg-white p-3 text-sm text-slate-700">
+                        <p className="font-medium text-slate-900">Personalized Context</p>
+                        <p className="mt-1 text-slate-600">Learner state is read from mastery, attempts, and hindsight traces.</p>
+                      </div>
+                      <div className="rounded-xl border border-blue-100 bg-white p-3 text-sm text-slate-700">
+                        <p className="font-medium text-slate-900">Adaptive Guidance</p>
+                        <p className="mt-1 text-slate-600">Routes and prompts adapt to weak concepts and prerequisite gaps.</p>
+                      </div>
+                      <div className="rounded-xl border border-blue-100 bg-white p-3 text-sm text-slate-700">
+                        <p className="font-medium text-slate-900">Progress Visibility</p>
+                        <p className="mt-1 text-slate-600">Completion, mastery updates, and recovery outcomes are surfaced clearly.</p>
+                      </div>
+                      <div className="rounded-xl border border-blue-100 bg-white p-3 text-sm text-slate-700">
+                        <p className="font-medium text-slate-900">Real App Modules</p>
+                        <p className="mt-1 text-slate-600">Powered by Practice, Diagnosis, Knowledge Map, Recovery, and AI APIs.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
