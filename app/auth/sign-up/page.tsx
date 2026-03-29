@@ -2,13 +2,14 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { FieldGroup, Field, FieldLabel } from "@/components/ui/field"
-import { AlertCircle, Brain, Loader2 } from "lucide-react"
+import { AlertCircle, Loader2 } from "lucide-react"
 
 export default function SignUpPage() {
   const [firstName, setFirstName] = useState("")
@@ -52,8 +53,15 @@ export default function SignUpPage() {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary">
-            <Brain className="h-6 w-6 text-primary-foreground" />
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl border border-blue-100 bg-white">
+            <Image
+              src="/logo.png"
+              alt="AdaptIQ logo"
+              width={48}
+              height={48}
+              className="h-full w-full object-cover"
+              priority
+            />
           </div>
           <CardTitle className="text-2xl">Create your account</CardTitle>
           <CardDescription>Start your personalized learning journey with AdaptIQ</CardDescription>
@@ -122,7 +130,7 @@ export default function SignUpPage() {
               </div>
             )}
           </CardContent>
-          <CardFooter className="flex flex-col gap-4">
+          <CardFooter className="flex flex-col gap-4 pt-2">
             <Button type="submit" className="h-12 w-full" disabled={isLoading}>
               {isLoading ? (
                 <>
