@@ -181,7 +181,7 @@ export default function LandingPage() {
           <div className="rounded-[2.25rem] border border-blue-100 bg-[#eef8ff] px-5 pb-8 pt-8 shadow-[0_30px_80px_-45px_rgba(59,130,246,0.55)] sm:px-8 lg:px-12 lg:pb-12 lg:pt-10">
             <div className="relative">
               <Badge className="mb-5 rounded-full border border-blue-200/70 bg-white/90 px-4 py-1.5 text-[11px] uppercase tracking-[0.14em] text-blue-700 hover:bg-white/90">
-                Adaptive Math Intelligence
+                Adaptive Intelligence
               </Badge>
 
               <h1 className="max-w-4xl text-4xl font-bold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-[4rem]">
@@ -204,7 +204,7 @@ export default function LandingPage() {
                       <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 text-blue-700">
                         <ArrowRight className="h-4 w-4" />
                       </span>
-                      <span className="pr-4 text-sm font-semibold text-slate-700 sm:text-base">Open Guide Tour</span>
+                      <span className="pr-4 text-sm font-semibold text-slate-700 sm:text-base">Dashboard</span>
                     </span>
                   </Link>
 
@@ -218,9 +218,9 @@ export default function LandingPage() {
                   </Link>
                 </div>
 
-                <div className="max-w-52 rounded-2xl border border-blue-200/70 bg-white/70 p-3 text-sm text-slate-600 backdrop-blur sm:max-w-60 md:ml-auto">
+                {/* <div className="max-w-52 rounded-2xl border border-blue-200/70 bg-white/70 p-3 text-sm text-slate-600 backdrop-blur sm:max-w-60 md:ml-auto">
                   Solve your math problems with AI-backed concept diagnosis and guided practice.
-                </div>
+                </div> */}
               </div>
 
             </div>
