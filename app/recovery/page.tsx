@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
 import { Navbar } from '@/components/navbar';
+import { RecoveryFeedback } from '@/components/recovery-feedback';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -37,6 +38,13 @@ type RecoveryPlan = {
   total_steps?: number;
 };
 
+type CompletionFeedback = {
+  pathId: string;
+  before: number;
+  after: number;
+  concept: string;
+};
+
 export default function RecoveryPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -49,6 +57,8 @@ export default function RecoveryPage() {
   const [questions, setQuestions] = useState<RecoveryQuestion[]>([]);
   const [selected, setSelected] = useState<Record<string, string>>({});
   const [isSavingStep, setIsSavingStep] = useState(false);
+  const [completionFeedback, setCompletionFeedback] = useState<CompletionFeedback | null>(null);
+  const [shownFeedbackPathIds, setShownFeedbackPathIds] = useState<string[]>([]);
 
   const activeConcept = pathConcepts[stepIndex] ?? null;
   const activePlans = useMemo(
@@ -205,7 +215,13 @@ export default function RecoveryPage() {
       body: JSON.stringify({ concept_id: activeConcept.concept_id, path_id: pathId, performance }),
     });
 
-    const patchData = await patchResponse.json().catch(() => ({} as { path_status?: string }));
+    const patchData = await patchResponse.json().catch(() => ({} as {
+      path_status?: string;
+      updated?: {
+        old_mastery?: number;
+        new_mastery?: number;
+      };
+    }));
 
     if (!patchResponse.ok) {
       setIsSavingStep(false);
@@ -247,10 +263,53 @@ export default function RecoveryPage() {
     );
 
     const completedFromApi = patchData.path_status === 'completed';
+    const completedLocally = stepIndex >= pathConcepts.length - 1;
+    const didCompletePath = completedFromApi || completedLocally;
 
-    if (!completedFromApi && stepIndex < pathConcepts.length - 1) {
+    if (didCompletePath && pathId && !shownFeedbackPathIds.includes(pathId)) {
+      const completeResponse = await fetch('/api/recovery/complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pathId }),
+      });
+
+      let before = Number(patchData.updated?.old_mastery ?? 0);
+      let after = Number(patchData.updated?.new_mastery ?? 0);
+      let concept = activeConcept.concept_name;
+
+      if (completeResponse.ok) {
+        const completeData = await completeResponse.json().catch(() => ({} as {
+          before?: number;
+          after?: number;
+          concept_id?: string;
+        }));
+
+        const apiBefore = Number(completeData.before ?? 0);
+        const apiAfter = Number(completeData.after ?? 0);
+
+        if (apiAfter > apiBefore) {
+          before = apiBefore;
+          after = apiAfter;
+          const conceptFromPath = pathConcepts.find((item) => item.concept_id === completeData.concept_id);
+          concept = conceptFromPath?.concept_name ?? concept;
+        }
+      }
+
+      setCompletionFeedback({
+        pathId,
+        before,
+        after,
+        concept,
+      });
+
+      setShownFeedbackPathIds((prev) => [...prev, pathId]);
+      await new Promise((resolve) => setTimeout(resolve, 2500));
+    }
+
+    if (!didCompletePath && stepIndex < pathConcepts.length - 1) {
       setStepIndex((prev) => prev + 1);
     } else {
+      setCompletionFeedback(null);
       const nextPlan = pathHistory.find(
         (plan) => plan.id !== pathId && (plan.status === 'active' || plan.status === 'in_progress'),
       );
@@ -420,6 +479,14 @@ export default function RecoveryPage() {
                     </div>
                   </div>
                 ))}
+
+                {completionFeedback ? (
+                  <RecoveryFeedback
+                    before={completionFeedback.before}
+                    after={completionFeedback.after}
+                    concept={completionFeedback.concept}
+                  />
+                ) : null}
 
                 <div className="flex justify-end">
                   <Button onClick={handleCompleteStep} disabled={isSavingStep}>

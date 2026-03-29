@@ -123,6 +123,15 @@ export async function generateLearningPath(userId: string, rootConceptId: string
     score: Number(item.score.toFixed(3)),
   }));
 
+  const { data: currentMastery } = await supabase
+    .from('user_concept_mastery')
+    .select('mastery_level')
+    .eq('user_id', userId)
+    .eq('concept_id', rootConceptId)
+    .maybeSingle();
+
+  const beforeMastery = toAccuracyUnit(currentMastery?.mastery_level);
+
   const { data: pathRow, error: pathError } = await supabase
     .from('learning_paths')
     .insert({
@@ -130,6 +139,7 @@ export async function generateLearningPath(userId: string, rootConceptId: string
       root_concept_id: rootConceptId,
       path: pathPayload,
       status: 'active',
+      before_mastery: beforeMastery,
     })
     .select('id')
     .single();
