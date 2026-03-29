@@ -105,6 +105,7 @@ export default function SignUpPage() {
                   id="password"
                   type="password"
                   placeholder="Create a strong password"
+                  className="h-12 px-4"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -116,13 +117,13 @@ export default function SignUpPage() {
 
             {error && (
               <div className="mt-4 flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
-                <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                <AlertCircle className="h-4 w-4 shrink-0" />
                 <span>{error}</span>
               </div>
             )}
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="h-12 w-full" disabled={isLoading}>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
