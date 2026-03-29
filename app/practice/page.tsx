@@ -15,7 +15,7 @@ import { toAccuracyUnit, toConceptStatus } from '@/lib/mastery-utils';
 import type { Concept, Question } from '@/lib/types';
 import { CheckCircle2, XCircle, RotateCcw, Trophy } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 type Dependency = {
@@ -89,8 +89,9 @@ function isGeneratedPlaceholderQuestion(row: { question_text: string; options: u
 
 export default function PracticePage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const focusMode = searchParams.get('focusMode') === 'true';
+  const [queryReady, setQueryReady] = useState(false);
+  const [conceptFilter, setConceptFilter] = useState<string | null>(null);
+  const [focusMode, setFocusMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -108,6 +109,13 @@ export default function PracticePage() {
   const [struggledConceptIds, setStruggledConceptIds] = useState<Set<string>>(new Set());
   const masteryRefreshTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasCompletedSessionRef = useRef(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setConceptFilter(params.get('concept'));
+    setFocusMode(params.get('focusMode') === 'true');
+    setQueryReady(true);
+  }, []);
 
   const ensureActiveSession = async (
     supabase: ReturnType<typeof createClient>,
@@ -136,6 +144,8 @@ export default function PracticePage() {
 
   useEffect(() => {
     const loadPracticeData = async () => {
+      if (!queryReady) return;
+
       const supabase = createClient();
 
       const {
@@ -147,7 +157,6 @@ export default function PracticePage() {
         return;
       }
 
-      const conceptFilter = searchParams.get('concept');
       const params = new URLSearchParams();
       if (conceptFilter) params.set('concept', conceptFilter);
       params.set('focusMode', String(focusMode));
@@ -298,7 +307,7 @@ export default function PracticePage() {
     };
 
     void loadPracticeData();
-  }, [router, searchParams]);
+  }, [router, queryReady, conceptFilter, focusMode]);
 
   useEffect(() => {
     if (!userId) return;
@@ -742,8 +751,13 @@ export default function PracticePage() {
               type="button"
               variant={focusMode ? 'default' : 'outline'}
               onClick={() => {
-                const nextParams = new URLSearchParams(searchParams.toString());
-                nextParams.set('focusMode', String(!focusMode));
+                const nextFocusMode = !focusMode;
+                const nextParams = new URLSearchParams();
+                if (conceptFilter) {
+                  nextParams.set('concept', conceptFilter);
+                }
+                nextParams.set('focusMode', String(nextFocusMode));
+                setFocusMode(nextFocusMode);
                 router.push(`/practice?${nextParams.toString()}`);
               }}
               className="rounded-lg"

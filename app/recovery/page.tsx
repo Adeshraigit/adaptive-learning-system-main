@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
@@ -45,7 +45,7 @@ type CompletionFeedback = {
   concept: string;
 };
 
-export default function RecoveryPage() {
+function RecoveryPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
@@ -151,7 +151,6 @@ export default function RecoveryPage() {
       if (selectedFromHistory) {
         selectPlan(selectedFromHistory);
       } else {
-        // Require explicit user selection of an active recovery unless a valid active pathId is in the URL.
         setPathId(null);
         setPathConcepts([]);
         setStepIndex(0);
@@ -587,5 +586,24 @@ export default function RecoveryPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function RecoveryPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-background">
+          <Navbar />
+          <main className="mx-auto max-w-300 px-4 py-8 lg:px-8">
+            <Card>
+              <CardContent className="py-10 text-center text-muted-foreground">Loading recovery plan...</CardContent>
+            </Card>
+          </main>
+        </div>
+      }
+    >
+      <RecoveryPageContent />
+    </Suspense>
   );
 }
