@@ -180,7 +180,7 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden pb-14 pt-10 lg:pb-20 lg:pt-14">
+      <section className="relative overflow-hidden pb-14  lg:pb-20 lg:pt-8">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,#dceeff_0%,transparent_52%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,#e5f2ff_0%,transparent_50%)]" />
         <div className="absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
