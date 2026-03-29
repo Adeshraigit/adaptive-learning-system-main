@@ -90,6 +90,7 @@ function isGeneratedPlaceholderQuestion(row: { question_text: string; options: u
 export default function PracticePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const focusMode = searchParams.get('focusMode') === 'true';
   const [isLoading, setIsLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -102,6 +103,8 @@ export default function PracticePage() {
   const [isGeneratingDiagnosis, setIsGeneratingDiagnosis] = useState(false);
   const [lastIncorrect, setLastIncorrect] = useState(false);
   const [isSavingAnswer, setIsSavingAnswer] = useState(false);
+  const [focusFallbackUsed, setFocusFallbackUsed] = useState(false);
+  const [focusWeakConceptCount, setFocusWeakConceptCount] = useState<number | null>(null);
   const [struggledConceptIds, setStruggledConceptIds] = useState<Set<string>>(new Set());
   const masteryRefreshTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasCompletedSessionRef = useRef(false);
@@ -145,8 +148,11 @@ export default function PracticePage() {
       }
 
       const conceptFilter = searchParams.get('concept');
+      const params = new URLSearchParams();
+      if (conceptFilter) params.set('concept', conceptFilter);
+      params.set('focusMode', String(focusMode));
 
-      const [conceptsResult, masteryResult, dependenciesResult, questionsResult, attemptsResult] = await Promise.all([
+      const [conceptsResult, masteryResult, dependenciesResult, questionsResponse, attemptsResult] = await Promise.all([
         supabase
           .from('concepts')
           .select('id, name, description, subjects:subject_id(name)'),
@@ -157,15 +163,7 @@ export default function PracticePage() {
         supabase
           .from('concept_dependencies')
           .select('concept_id, prerequisite_id'),
-        (conceptFilter
-          ? supabase
-              .from('questions')
-              .select('id, question_text, options, correct_answer, explanation, difficulty, concept_id')
-              .eq('concept_id', conceptFilter)
-          : supabase
-              .from('questions')
-              .select('id, question_text, options, correct_answer, explanation, difficulty, concept_id'))
-          .limit(500),
+        fetch(`/api/questions?${params.toString()}`),
         supabase
           .from('question_attempts')
           .select('question_id, created_at')
@@ -211,7 +209,29 @@ export default function PracticePage() {
         }
       });
 
-      const allQuestionRows = questionsResult.data ?? [];
+      const questionPayload = await questionsResponse.json().catch(() => ({} as {
+        questions?: Array<{
+          id: string;
+          question_text: string;
+          options: unknown;
+          correct_answer: string;
+          explanation: string | null;
+          difficulty: number | null;
+          concept_id: string | null;
+        }>;
+        fallback_used?: boolean;
+        weak_concepts_count?: number;
+      }));
+
+      if (!questionsResponse.ok) {
+        toast.error('Could not load practice questions.');
+      }
+
+      const allQuestionRows = questionsResponse.ok ? (questionPayload.questions ?? []) : [];
+      setFocusFallbackUsed(Boolean(questionPayload.fallback_used));
+      setFocusWeakConceptCount(
+        typeof questionPayload.weak_concepts_count === 'number' ? questionPayload.weak_concepts_count : null,
+      );
       const curatedQuestionRows = allQuestionRows.filter((row) => !isGeneratedPlaceholderQuestion(row));
       const questionPool = curatedQuestionRows.length > 0 ? curatedQuestionRows : allQuestionRows;
 
@@ -700,8 +720,36 @@ export default function PracticePage() {
             <p className="text-muted-foreground">
               Practice questions powered by your live database data
             </p>
+            {focusMode ? (
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <p className="text-sm text-muted-foreground">Focusing on your weak areas</p>
+                {focusFallbackUsed ? (
+                  <Badge variant="outline" className="text-xs">
+                    No weak concepts yet, using default set
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="text-xs">
+                    {typeof focusWeakConceptCount === 'number'
+                      ? `${focusWeakConceptCount} weak concept${focusWeakConceptCount === 1 ? '' : 's'} targeted`
+                      : 'Weak concepts targeted'}
+                  </Badge>
+                )}
+              </div>
+            ) : null}
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <Button
+              type="button"
+              variant={focusMode ? 'default' : 'outline'}
+              onClick={() => {
+                const nextParams = new URLSearchParams(searchParams.toString());
+                nextParams.set('focusMode', String(!focusMode));
+                router.push(`/practice?${nextParams.toString()}`);
+              }}
+              className="rounded-lg"
+            >
+              {focusMode ? 'Focus Mode: ON' : 'Focus Mode: OFF'}
+            </Button>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-[#22C55E]" />
               <span className="font-medium text-foreground">{stats.correct}</span>
